@@ -1,0 +1,9 @@
+{
+  "AwtrixHost": "YOUR_CLOCK_IP",
+  "PollIntervalMinutes": 2,
+  "ThinkingDelaySeconds": 60,
+  "AutoRefreshLogin": true,
+  "ClaudeCli": "",
+  "CelebrationSound": true,
+  "SoundWindows": [[0, 24], [0, 24], [0, 24], [0, 24], [0, 24], [0, 24], [0, 24]]
+}

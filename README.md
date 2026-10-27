@@ -1,5 +1,7 @@
 # ClaudeCodeMonitor
 
+> **🍎 macOS port:** This fork adds a Python version for macOS in [`macos/`](macos/README.md). It shows the usage screens only while Claude is working. The original Windows program below is unchanged. All credit for the idea, the design and Clawd goes to [Rasmus Hochreuter](https://github.com/RasmusHochreuter/ClaudeCodeMonitor).
+
 <p align="center"><img src="docs/images/on-monitor.jpg" alt="The clock mounted on top of a monitor, showing Clawd next to 59% session usage" width="800"></p>
 
 <p align="center"><img src="docs/images/session.gif" alt="Session screen: Clawd walking next to 42%, with the session time bar underneath" width="408"></p>
