@@ -1,8 +1,5 @@
-bin/
-obj/
-publish/
-*.user
-appsettings.Local.json
-
-# Local reference screenshot (third-party content, not part of the project)
-Ulanzi.jpg
+__pycache__/
+config.json
+monitor.log
+thinking/
+.DS_Store
