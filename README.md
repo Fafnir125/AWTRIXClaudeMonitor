@@ -80,10 +80,10 @@ The monitor checks for markers every 2 seconds. It fetches usage every 2 minutes
 | `AutoRefreshLogin` | `true` | refresh an expired login through the CLI (see above) |
 | `ClaudeCli` | `""` | path to `claude`; empty searches the usual places |
 | `CelebrationSound` | `true` | play the melody when a window resets |
-| `SoundWindows` | always | when the melody may play, see below |
+| `SoundWindows` | daily 8–22 | when the melody may play, see below |
 | `WeekPeekIntervalMinutes` / `WeekPeekSeconds` | `10` / `5` | how often and how long the weekly screen is shown in between |
 
-`SoundWindows` holds seven `[start, end]` hour pairs, Monday first. An end above 24 runs past midnight. Example: quiet except Mon–Thu 10–23 and Fri–Sun 11–02:
+`SoundWindows` holds seven `[start, end]` hour pairs, Monday first. An end above 24 runs past midnight. By default the melody plays daily from 8:00 to 22:00. Example for Mon–Thu 10–23 and Fri–Sun 11–02:
 
 ```json
 "SoundWindows": [[10, 23], [10, 23], [10, 23], [10, 23], [11, 26], [11, 26], [11, 26]]

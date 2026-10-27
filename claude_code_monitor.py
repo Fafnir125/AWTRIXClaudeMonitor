@@ -42,7 +42,7 @@ DEFAULTS = {
     # Read by thinking_hook.sh: how long a turn must run before the screens appear.
     "ThinkingDelaySeconds": 60,
     # Seven [start, end] hour pairs, Monday first; end may exceed 24 to run past midnight.
-    "SoundWindows": [[0, 24]] * 7,
+    "SoundWindows": [[8, 22]] * 7,
 }
 
 SESSION_APP, WEEK_APP, ISSUE_APP = "claude_session", "claude_week", "claude_issue"
