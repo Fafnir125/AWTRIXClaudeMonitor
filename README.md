@@ -70,6 +70,8 @@ The usage numbers come from the same endpoint that powers the usage bars in Clau
 
 The monitor checks for markers every 2 seconds. It fetches usage every 2 minutes either way, so the numbers are ready when the screens appear. Each marker is refreshed every 30 seconds. If a session crashes, its marker expires after 90 seconds, so a screen never stays stuck on the clock.
 
+When you cancel a reply with Esc, Claude Code skips the `Stop` hook. So the timer also watches the session's transcript: after 3 minutes without any new output the marker is dropped, and after 30 quiet minutes the timer ends itself.
+
 ## Settings (`config.json`)
 
 | Key | Default | Meaning |

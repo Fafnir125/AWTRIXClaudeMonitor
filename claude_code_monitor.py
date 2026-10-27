@@ -376,9 +376,31 @@ class Screens:
         fraction = 1 - min(max(until.total_seconds() / 60 / 300, 0), 1) if until else 0
         self._segmented_bar(grid, fraction, 5, 5, lit, dim)
 
+    @staticmethod
+    def _draw_commands(grid):
+        # The clock rejects payloads above roughly 2 KB, so same-coloured runs become lines.
+        done = [[False] * 32 for _ in range(8)]
+        draw = []
+        for y in range(8):
+            for x in range(32):
+                c = grid[y][x]
+                if not c or done[y][x]:
+                    continue
+                x1 = x
+                while x1 + 1 < 32 and grid[y][x1 + 1] == c and not done[y][x1 + 1]:
+                    x1 += 1
+                y1 = y
+                if x1 == x:
+                    while y1 + 1 < 8 and grid[y1 + 1][x] == c and not done[y1 + 1][x]:
+                        y1 += 1
+                for yy in range(y, y1 + 1):
+                    for xx in range(x, x1 + 1):
+                        done[yy][xx] = True
+                draw.append({"dp": [x, y, c]} if (x, y) == (x1, y1) else {"dl": [x, y, x1, y1, c]})
+        return draw
+
     def _app(self, grid, icon=None):
-        draw = [{"dp": [x, y, c]} for y in range(8) for x in range(32) if (c := grid[y][x])]
-        app = {"draw": draw, "lifetime": self.lifetime, "lifetimeMode": 0}
+        app = {"draw": self._draw_commands(grid), "lifetime": self.lifetime, "lifetimeMode": 0}
         if icon:
             app["icon"] = icon
         return app
