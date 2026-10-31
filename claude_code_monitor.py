@@ -54,7 +54,8 @@ THINKING_STALE_SECONDS = 90
 
 def thinking_active():
     try:
-        names = [n for n in os.listdir(THINKING_DIR) if not n.endswith(".pid")]
+        # Marks are bare session ids; anything with an extension (.pid, logs) is not one.
+        names = [n for n in os.listdir(THINKING_DIR) if "." not in n]
     except FileNotFoundError:
         return False
     cutoff = time.time() - THINKING_STALE_SECONDS
@@ -128,9 +129,12 @@ def refresh_login(configured_cli):
         return
     home = os.path.expanduser("~")
     # A clean environment, so a desktop-app session's variables do not redirect the CLI.
-    env = {"HOME": home, "USER": os.environ.get("USER", ""), "PATH": CLI_SEARCH_PATH.format(home=home)}
+    env = {"HOME": home, "USER": os.environ.get("USER", ""), "PATH": CLI_SEARCH_PATH.format(home=home),
+           "AWTRIX_CLAUDE_MONITOR": "1"}
     try:
-        subprocess.run([cli, "-p", "Reply with OK", "--model", "haiku"],
+        # Hooks off as well, so this run never shows up as "Claude is thinking".
+        subprocess.run([cli, "-p", "Reply with OK", "--model", "haiku",
+                        "--settings", '{"disableAllHooks": true}'],
                        env=env, cwd="/tmp", capture_output=True, timeout=120)
         log.info("Login refreshed via Claude CLI")
     except (OSError, subprocess.SubprocessError) as ex:
