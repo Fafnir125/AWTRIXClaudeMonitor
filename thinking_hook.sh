@@ -17,6 +17,11 @@ INPUT=$(cat)
 SID=$(printf '%s' "$INPUT" | sed -n 's/.*"session_id" *: *"\([^"]*\)".*/\1/p' | head -1)
 SID=${SID:-default}
 TRANSCRIPT=$(printf '%s' "$INPUT" | sed -n 's/.*"transcript_path" *: *"\([^"]*\)".*/\1/p' | head -1)
+# Fallback if the hook input carries no usable transcript path.
+if [ ! -f "$TRANSCRIPT" ]; then
+  TRANSCRIPT=$(ls "$HOME"/.claude/projects/*/"$SID".jsonl 2>/dev/null | head -1)
+fi
+[ "$1" = start ] && echo "$(date '+%F %T') sid=$SID transcript=${TRANSCRIPT:-none} keys=$(printf '%s' "$INPUT" | grep -o '"[a-z_]*" *:' | tr -d ' :"' | tr '\n' ',')" >> "$DIR/hook.log"
 FLAG="$DIR/$SID"
 PIDF="$DIR/$SID.pid"
 mkdir -p "$DIR"
