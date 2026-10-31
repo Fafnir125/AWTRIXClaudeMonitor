@@ -557,15 +557,22 @@ class Monitor:
         if self.active:
             self.push_screens()
 
-    def mark_stale(self, reason):
+    def mark_stale(self, reason, needs_login=False):
         if not self.stale:
             log.info("Display is now stale: %s", reason)
+            if needs_login:
+                self.notify("Claude login expired - run `claude` in Terminal and type /login")
         self.stale = True
+
+    @staticmethod
+    def notify(message):
+        subprocess.run(["osascript", "-e", f'display notification "{message}" with title "AWTRIXClaudeMonitor"'],
+                       capture_output=True, timeout=10, check=False)
 
     def update_state(self):
         creds = read_credentials(self.cfg["KeychainService"])
         if creds is None:
-            return self.mark_stale("credentials missing or unreadable")
+            return self.mark_stale("credentials missing or unreadable", needs_login=True)
         token, expires_at = creds
         t = now()
 
@@ -603,7 +610,7 @@ class Monitor:
             self.detect_window_reset(self.snapshot, value)
             self.snapshot, self.stale, self.failures = value, False, 0
         elif kind == "unauthorized":
-            self.mark_stale("usage endpoint rejected the token (401/403)")
+            self.mark_stale("usage endpoint rejected the token (401/403)", needs_login=True)
         elif kind == "ratelimited":
             pause = value if value and value > self.poll_seconds else self.poll_seconds
             log.info("Rate limited; pausing usage calls for %ss", pause)
